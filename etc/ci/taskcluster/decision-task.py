@@ -44,15 +44,25 @@ def main():
     )
 
     decision.create_task_with_in_tree_dockerfile(
+        task_name="building for Linux x86_64 in release mode",
+        command="""
+            ./mach build --release
+        """,
+        env=BUILD_ENV,
+        dockerfile=dockerfile("build-x86_64-linux"),
+        max_run_time_minutes=3 * 60,
+        scopes=CARGO_CACHE_SCOPES,
+        cache=CARGO_CACHE,
+    )
+
+    decision.create_task_with_in_tree_dockerfile(
         task_name="tidy",
         command="""
             ./mach test-tidy --no-progress --all
             ./mach test-tidy --no-progress --self-test
         """,
         dockerfile=dockerfile("build-x86_64-linux"),
-        max_run_time_minutes=3 * 60,
-        scopes=CARGO_CACHE_SCOPES,
-        cache=CARGO_CACHE,
+        max_run_time_minutes=20,
     )
 
 
