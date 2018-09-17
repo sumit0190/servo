@@ -216,11 +216,17 @@ def check_license(file_name, lines):
        config["skip-check-licenses"]:
         raise StopIteration
 
-    if lines[0].startswith("#!") and lines[1].strip():
-        yield (1, "missing blank line after shebang")
+    # https://www.python.org/dev/peps/pep-0263/#defining-the-encoding
+    coding_line = "^[ \t\f]*#.*?coding[:=][ \t]*([-_.a-zA-Z0-9]+)"
+
+    has_initial_line = lines[0].startswith("#!") or (
+        file_name.endswith(".py") and re.match(coding_line, lines[0]))
+
+    if has_initial_line and lines[1].strip():
+        yield (1, "missing blank line after shebang or encoding")
 
     blank_lines = 0
-    max_blank_lines = 2 if lines[0].startswith("#!") else 1
+    max_blank_lines = 2 if has_initial_line else 1
     license_block = []
 
     for l in lines:

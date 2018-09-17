@@ -85,7 +85,7 @@ class CheckTidiness(unittest.TestCase):
 
     def test_shebang_license(self):
         errors = tidy.collect_errors_for_files(iterFile('shebang_license.py'), [], [tidy.check_license], print_text=False)
-        self.assertEqual('missing blank line after shebang', errors.next()[2])
+        self.assertEqual('missing blank line after shebang or encoding', errors.next()[2])
         self.assertNoMoreErrors(errors)
 
     def test_shell(self):
