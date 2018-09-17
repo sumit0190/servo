@@ -37,9 +37,10 @@ def main():
     )
 
     decision.create_task_with_in_tree_dockerfile(
-        task_name="building for Linux x86_64 in dev mode",
+        task_name="building for Linux x86_64 in dev mode + unit tests",
         command="""
             ./mach build --dev
+            ./mach test-unit
         """,
         env=BUILD_ENV,
         dockerfile=dockerfile("build-x86_64-linux"),
